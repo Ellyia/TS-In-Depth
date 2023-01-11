@@ -4,7 +4,7 @@
 import { ReferenceItem, UL, RefBook, Shelf } from './classes';
 import { Book, Logger, Magazine, ShelfItem } from './interfaces';
 // import RefBook from './classes/encyclopedia';
-import { getObjectProperty, purge, printRefBook, calcTotalPages, getAllBooks, getBookAuthorByIndex, getBookByID, getBookTitlesByCategory ,getProperty, getTitles, createCustomer } from './functions';
+import { getBooksByCategoryPromise, getBooksByCategory, getObjectProperty, purge, printRefBook, calcTotalPages, getAllBooks, getBookAuthorByIndex, getBookByID, getBookTitlesByCategory ,getProperty, getTitles, createCustomer, logCategorySearch, logSearchResults } from './functions';
 // import type { Library } from './classes/library';
 import { Library } from './classes/library';
 import { Category } from './enums';
@@ -587,12 +587,12 @@ function showHello(divName: string, name: string) {
 //// Generics - загальні типи - 13.12.22 - працюють з множиною типів
 
         // Task 07.01
-const inventory: Book[] = [
-        {id: 10, title: 'The C Programming Language', author: '???', available: true, category: Category.Software},
-        {id: 11, title: 'Code Complete', author: 'Steve McConnell', available: true, category: Category.Software},
-        {id: 12, title: '8-Bit Graphics width Cobol', author: 'A. B.', available: true, category: Category.Software},
-        {id: 13, title: 'Cool autoexec.bat Scripts!', author: 'C. D.', available: true, category: Category.Software},
-];
+// const inventory: Book[] = [
+//         {id: 10, title: 'The C Programming Language', author: '???', available: true, category: Category.Software},
+//         {id: 11, title: 'Code Complete', author: 'Steve McConnell', available: true, category: Category.Software},
+//         {id: 12, title: '8-Bit Graphics width Cobol', author: 'A. B.', available: true, category: Category.Software},
+//         {id: 13, title: 'Cool autoexec.bat Scripts!', author: 'C. D.', available: true, category: Category.Software},
+// ];
 
 // const result1 = purge<Book>(inventory);
 // console.log(result1);
@@ -682,3 +682,35 @@ const inventory: Book[] = [
 // console.log(favouriteLibrarian.name);
 // favouriteLibrarian.assistCustomer('Boris', 'LearnTypeScript');
 // console.log(favouriteLibrarian);
+
+// Task 09.01
+// console.log('Begin');
+// getBooksByCategory(Category.JavaScript, logCategorySearch);
+// getBooksByCategory(Category.Software, logCategorySearch);
+// console.log('End');
+
+// Promises - (then/ catch/ finally - коли є залежні послідовні асинхронні операції) - (дочекались одного, з його результатом через .then викликаємо наступну асинх.опер.)
+// promise.any / all / race / allSettled - cтатичні методи (коли є паралельне виконання асинх.коду)
+// promise - (є Дженеріком) отримує на вхід функцію, яка має 2 парамерти, які теж є функціями
+
+// // Task 09.02
+// console.log('Begin');
+// getBooksByCategoryPromise(Category.JavaScript)
+//         .then(titles => {
+//             console.log(titles);
+
+//             return Promise.resolve(titles.length);
+//         })
+//         .then(n => console.log(n)) // в .then приходить значення із попереднього .then
+//         .catch(reason => console.log(reason));
+// getBooksByCategoryPromise(Category.Software)
+//         .then(titles => console.log(titles))
+//         .catch(reason => console.log(reason));
+// console.log('End');
+
+// асинхронні ф повертають Promise, await - призупиняє роботу ф. та чекає поки робота поверне проміс, який перейде в якийсь стан: resolve/reject i дістає значення та повертає його (результат)
+// Task 09.03
+console.log('Begin');
+logSearchResults(Category.JavaScript);
+logSearchResults(Category.Software).catch(err => console.log(err));//    якщо буде помилка, повернеться проміс в стані реджект - await генерить exeption - код пропускається, ф. поверне проміс в стані реджект із exeption (як значенням)
+console.log('End');

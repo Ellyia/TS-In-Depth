@@ -1,6 +1,6 @@
 
 
-import { createCustomer } from "./functions";
+import { createCustomer, getBooksByCategoryPromise } from "./functions";
 import { Author, Book, Person1 } from "./interfaces";
 
 // export type Book = { // aleas - описуе объект: не важливо, використати type чи interface коли описуєш форму обєкта (потрібне присвоєння "=")
@@ -46,3 +46,9 @@ type RemoveProps <T extends object, TProps extends keyof T> = {
 
 type BookRequiredPropsType = RemoveProps<Book, BookOptionalProps>;
 type BookOptionalPropsType = RemoveProps<Book, BookRequiredProps>;
+
+export type Unpromisify<T> = T extends Promise<infer R> ? R : never;
+export type UnArray<T> = T extends Array<infer R> ? R : never;
+// type pr = return <typeof getBooksByCategoryPromise> // type Promise
+
+type pr = Unpromisify<ReturnType<typeof getBooksByCategoryPromise>>;
